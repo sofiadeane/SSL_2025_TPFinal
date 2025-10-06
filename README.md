@@ -1,4 +1,4 @@
-# SSL_2025_TPFinal
+# Repositorio para el TP Final de Sintaxis y Semantica de los Lenguajes 2025
 
 ## Integrantes: 
 | NOMBRE | APELLIDO | LEGAJO | COMISIÓN |
