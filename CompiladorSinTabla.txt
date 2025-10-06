@@ -1,0 +1,104 @@
+
+/**************************Scanner************************************/
+TOKEN scanner() {
+    int estado = 0;
+    int c;
+    int i = 0;
+
+    while (1) {
+        c = fgetc(in);
+
+        switch (estado) {
+        case 0:
+            if (c == EOF) return FDT;
+            else if (c == '\n' || c == '\t' || isspace(c)) estado = 0;
+            else if (isalpha(c)) { buffer[i++] = c; estado = 1; }
+            else if (isdigit(c)) { buffer[i++] = c; estado = 2; } // entero o real
+            else if (c == '\'') { estado = 4; } // constante de carácter
+            else if (c == '+') return SUMA;
+            else if (c == '-') return RESTA;
+            else if (c == '(') return PARENIZQUIERDO;
+            else if (c == ')') return PARENDERECHO;
+            else if (c == ';') return PUNTOYCOMA;
+            else if (c == ',') return COMA;
+            else if (c == '{') return LLAVEIZQUIERDA;
+            else if (c == '}') return LLAVEDERECHA;
+            else if (c == ':') {
+                c = fgetc(in);
+                if (c == '=') return ASIGNACION;
+                else return ERRORLEXICO;
+            }
+            else if (c == '=') {
+                c = fgetc(in);
+                if (c == '=') return IGUAL;
+                else { ungetc(c, in); return ERRORLEXICO; }
+            }
+            else if (c == '!') {
+                c = fgetc(in);
+                if (c == '=') return DISTINTO;
+                else return ERRORLEXICO;
+            }
+            else if (c == '<') {
+                c = fgetc(in);
+                if (c == '=') return MENORIGUAL;
+                else { ungetc(c, in); return MENOR; }
+            }
+            else if (c == '>') {
+                c = fgetc(in);
+                if (c == '=') return MAYORIGUAL;
+                else { ungetc(c, in); return MAYOR; }
+            }
+            else return ERRORLEXICO;
+            break;
+
+        case 1: // Identificador o palabra reservada
+            if (isalnum(c)) {
+                buffer[i++] = c;
+            } else {
+                ungetc(c, in);
+                buffer[i] = '\0';
+                return ID;
+            }
+            break;
+
+        case 2: // Constante entera o real
+            if (isdigit(c)) {
+                buffer[i++] = c;
+            } else if (c == '.') {
+                buffer[i++] = c;
+                estado = 3; // pasa a real
+            } else {
+                ungetc(c, in);
+                buffer[i] = '\0';
+                return CONSTANTE; // entero
+            }
+            break;
+
+        case 3: // Parte fraccionaria de real
+            if (isdigit(c)) {
+                buffer[i++] = c;
+            } else {
+                ungetc(c, in);
+                buffer[i] = '\0';
+                return CONST_REAL;
+            }
+            break;
+
+        case 4: // Constante de carácter
+            if (c == '\'' || c == EOF) {
+                // error: carácter vacío
+                return ERRORLEXICO;
+            } else {
+                buffer[0] = c;
+                buffer[1] = '\0';
+                c = fgetc(in);
+                if (c != '\'') {
+                    return ERRORLEXICO; // falta cerrar '
+                }
+                return CONST_CHAR;
+            }
+            break;
+        }
+    }
+}
+
