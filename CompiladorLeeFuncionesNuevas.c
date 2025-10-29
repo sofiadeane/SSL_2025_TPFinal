@@ -174,26 +174,21 @@ void Programa(void){
 }
 
 void ListaSentencias(void){
-    //printf("DEBUG: Iniciando ListaSentencias (global)\n");
     
     while (1) {
         TOKEN t = ProximoToken();
-        //printf("DEBUG ListaSentencias: token=%d, buffer='%s'\n", t, buffer);
         
         if (t == FIN) {
-            //printf("DEBUG: Encontrado FIN, terminando ListaSentencias\n");
             flagToken = 1;
             return;
         }
         
         if (t == ERRORLEXICO) {
-           // printf("DEBUG: Error lexico, terminando\n");
             return;
         }
         
         // IGNORAR 'sino' - es parte de la estructura SI
         if (t == ID && strcmp(buffer, "sino") == 0) {
-            //printf("DEBUG: Ignorando 'sino' en ListaSentencias\n");
             continue;
         }
         
@@ -204,11 +199,9 @@ void ListaSentencias(void){
             case SI:
             case MIENTRAS:
             case REPETIR:
-                //printf("DEBUG: Llamando a Sentencia para token %d\n", t);
                 Sentencia();
                 break;
             default:
-                //printf("DEBUG: Token no reconocido %d, terminando ListaSentencias\n", t);
                 flagToken = 1;
                 return;
         }
@@ -217,11 +210,9 @@ void ListaSentencias(void){
 
 void Sentencia(void){
     TOKEN tok = tokenActual;
-    //printf("DEBUG Sentencia: token=%d, buffer='%s'\n", tok, buffer);
     
     switch ( tok ){
         case ID :
-            //printf("DEBUG: Procesando asignacion\n");
             REG_EXPRESION izq, der;
             Identificador(&izq);
             Match(ASIGNACION);
@@ -231,7 +222,6 @@ void Sentencia(void){
             break;
 
         case LEER :
-            //printf("DEBUG: Procesando LEER\n");
             Match(LEER);
             Match(PARENIZQUIERDO);
             ListaIdentificadores();
@@ -240,7 +230,6 @@ void Sentencia(void){
             break;
 
         case ESCRIBIR :
-            //printf("DEBUG: Procesando ESCRIBIR\n");
             Match(ESCRIBIR);
             Match(PARENIZQUIERDO);
             ListaExpresiones();
@@ -249,26 +238,21 @@ void Sentencia(void){
             break;
 
         case SI:
-            //printf("DEBUG: Procesando SI\n");
             ProcesarSI();
             break;
 
         case MIENTRAS:
-            //printf("DEBUG: Procesando MIENTRAS\n");
             ProcesarMIENTRAS();
             break;
 
         case REPETIR:
-           // printf("DEBUG: Procesando REPETIR\n");
             ProcesarREPETIR();
             break;
 
         default : 
-            //printf("DEBUG: Token no manejado en Sentencia: %d\n", tok);
             flagToken = 1;
             return;
     }
-    //printf("DEBUG: Sentencia completada\n");
 }
 
 void ListaIdentificadores(void){
@@ -414,7 +398,6 @@ void OperadorAditivo(char * presul){
 /**********************Estructuras de Control Finales******************************/
 
 void ProcesarSI(void) {
-    //printf("DEBUG: Iniciando SI\n");
     static int contadorSI = 0;
     int etiquetaSI = contadorSI++;
     char etiquetaFalso[TAMLEX], etiquetaFin[TAMLEX];
@@ -445,11 +428,9 @@ void ProcesarSI(void) {
     }
     
     Generar("Etiqueta", etiquetaFin, "", "");
-    //printf("DEBUG: Fin SI\n");
 }
 
 void ProcesarMIENTRAS(void) {
-    //printf("DEBUG: Iniciando MIENTRAS\n");
     static int contadorMIENTRAS = 0;
     int etiquetaMIENTRAS = contadorMIENTRAS++;
     char etiquetaInicio[TAMLEX], etiquetaFin[TAMLEX];
@@ -469,11 +450,9 @@ void ProcesarMIENTRAS(void) {
     
     Generar("Salto", etiquetaInicio, "", "");
     Generar("Etiqueta", etiquetaFin, "", "");
-    //printf("DEBUG: Fin MIENTRAS\n");
 }
 
 void ProcesarREPETIR(void) {
-    //printf("DEBUG: Iniciando REPETIR\n");
     static int contadorREPETIR = 0;
     int etiquetaREPETIR = contadorREPETIR++;
     char etiquetaInicio[TAMLEX];
@@ -493,36 +472,30 @@ void ProcesarREPETIR(void) {
     ExpresionLogicaCondicionalInversa(etiquetaInicio);
     Match(PARENDERECHO);
     Match(PUNTOYCOMA);
-    //printf("DEBUG: Fin REPETIR\n");
 }
 
 /**********************Función para Procesar Múltiples Sentencias******************************/
 
 void ProcesarBloque(void) {
-    //printf("DEBUG: Iniciando ProcesarBloque\n");
     
     while (1) {
         TOKEN t = ProximoToken();
-        //printf("DEBUG ProcesarBloque: token=%d, buffer='%s'\n", t, buffer);
         
         // Palabras clave que indican el fin del bloque
         if (t == FIN || 
             t == MIENTRAS || t == REPETIR || t == SI ||
             (t == ID && (strcmp(buffer, "sino") == 0 || strcmp(buffer, "hasta") == 0))) {
-            //printf("DEBUG: Fin del bloque, token=%d, buffer='%s'\n", t, buffer);
             flagToken = 1; // Mantener el token para la estructura padre
             return;
         }
         
         // Si no hay más tokens válidos, terminar
         if (t == ERRORLEXICO || t == FDT) {
-            //printf("DEBUG: Error o fin de archivo en bloque\n");
             return;
         }
         
         // Si no es una sentencia válida, terminar
         if (!(t == ID || t == LEER || t == ESCRIBIR || t == SI || t == MIENTRAS || t == REPETIR)) {
-            //printf("DEBUG: Token no valido para sentencia: %d, buffer='%s'\n", t, buffer);
             flagToken = 1;
             return;
         }
@@ -1014,10 +987,6 @@ TOKEN scanner() {
         }
         
         estado = tabla[estado][col];
-
-        /*// DEBUG: Mostrar transición
-        printf("DEBUG Transicion: car='%c'(%d) -> col=%d, estado=%d\n", 
-               (car == EOF) ? '?' : (char)car, car, col, estado);*/
 
         // Agregar al buffer si no es espacio y no es estado inicial/error
         if (estado != 0 && estado != 21 && car != EOF) {
