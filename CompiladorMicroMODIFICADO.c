@@ -36,16 +36,13 @@ RegTS TS[1000] = {
     {"leer", LEER, T_INT},
     {"escribir", ESCRIBIR, T_INT},
     {"si", SI, T_INT},
-    {"sino", ID, T_INT},
-    {"entonces", ID, T_INT},    // Palabra clave para SI
-    {"hacer", ID, T_INT},       // Palabra clave para MIENTRAS  
     {"mientras", MIENTRAS, T_INT},
     {"repetir", REPETIR, T_INT},
     {"hasta", HASTA, T_INT},
     {"$", FDT, T_INT}
 };
 
-int numTS = 12; // Número actual de elementos en la TS
+int numTS = 9; // Número actual de elementos en la TS
 
 typedef struct {
     TOKEN clase;
@@ -185,11 +182,6 @@ void ListaSentencias(void){
         
         if (t == ERRORLEXICO) {
             return;
-        }
-        
-        // IGNORAR 'sino' - es parte de la estructura SI
-        if (t == ID && strcmp(buffer, "sino") == 0) {
-            continue;
         }
         
         switch (t) {
@@ -413,20 +405,6 @@ void ProcesarSI(void) {
     
     // Bloque verdadero (múltiples sentencias)
     ProcesarBloque();
-    
-    // Salto al final para evitar el bloque sino
-    Generar("Salto", etiquetaFin, "", "");
-    
-    // Bloque falso (sino)
-    Generar("Etiqueta", etiquetaFalso, "", "");
-    
-    // Verificar si hay sino
-    if (ProximoToken() == ID && strcmp(buffer, "sino") == 0) {
-        Match(ID);
-        ProcesarBloque(); // Bloque sino (múltiples sentencias)
-    } else {
-        flagToken = 1; // Mantener el token si no hay sino
-    }
     
     Generar("Etiqueta", etiquetaFin, "", "");
 }
