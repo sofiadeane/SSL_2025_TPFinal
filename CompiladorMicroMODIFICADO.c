@@ -212,7 +212,7 @@ void Sentencia(void){
     TOKEN token = tokenActual;
     
     switch ( token ){
-        case ID :
+        case ID : {
             REG_EXPRESION izq, der;
             Identificador(&izq);
             Match(ASIGNACION);
@@ -220,15 +220,15 @@ void Sentencia(void){
             Asignar(izq, der);
             Match(PUNTOYCOMA);
             break;
-
-        case LEER :
+        }
+        case LEER : {
             Match(LEER);
             Match(PARENIZQUIERDO);
             ListaIdentificadores();
             Match(PARENDERECHO);
             Match(PUNTOYCOMA);
             break;
-
+        }
         case ESCRIBIR :
             Match(ESCRIBIR);
             Match(PARENIZQUIERDO);
@@ -375,7 +375,7 @@ void Primaria(REG_EXPRESION * presul){
             break;
 
         default : 
-            fprintf(stderr, "Error en Primaria: Token inesperado %d (buffer: '%s')\n", tok, buffer);
+            fprintf(stderr, "Error en Primaria: Token inesperado %d (buffer: '%s')\n", token, buffer);
             ErrorSintactico();
             break;
     }
