@@ -19,18 +19,13 @@ LETRA•(DIGITO+LETRA)* + COMILLA•LETRA•COMILLA + DIGITO⁺•PUNTO?•DIGIT
 
 
 **Gramatica:**
-S -> LETRA T  +  DIGITO X  +  COMILLA U  +  V
-T -> LETRA T 
-T -> DIGITO T
-T -> ε
-U -> LETRA W
-V -> uno de SUMA, RESTA, PARENIZQUIERDO, PARENDERECHO, COMA, PUNTOYCOMA, ASIGNACION
-W -> COMILLA
-X -> DIGITO X
-X -> ε
-X -> PUNTO Y
-Y -> DIGITO Y
-Y -> ε
+S   →   LETRA T  +  DÍGITO W  +  COMILLA U  +  Y
+T   →   LETRA T + DÍGITO T + ε
+U   →   LETRA V
+V   →   COMILLA
+W   →   DÍGITO X  +  ε  +  PUNTO X
+X   →   DÍGITO X  +  ε
+Y   →   SUMA + RESTA + PARENIZQUIERDO + PARENDERECHO + COMA + PUNTOYCOMA + ASIGNACION
 
 
 ε:                  palabra vacía
@@ -52,7 +47,11 @@ PROCESO: [ ☞ Quiero ver el paso a paso ☜ ](https://lucid.app/lucidchart/c8d4
 
 RESULTADO: ![Diagrama del AFN](./AFN.png)
 
-
+**SINTAXIS SENTENCIAS NUEVAS**
+Sentencia   →   Asignacion | Leer | Escribir | Mientras | Si | Repetir
+Mientras    →   "mientras" ( Expresion ) "inicio" ListaSentencias "fin"
+Si          →   "si" Expresion "inicio" ListaSentencias "fin"
+Repetir     →   "repetir" ListaSentencias "hasta" "(" Expresion ")"
 
 
 

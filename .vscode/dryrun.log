@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/sofiadeane/Documents/UTN/SSL/Trabajo Final/SSL_2025_TPFinal'
+make: Leaving directory `/Users/sofiadeane/Documents/UTN/SSL/Trabajo Final/SSL_2025_TPFinal'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+
