@@ -210,25 +210,26 @@ void ListaSentencias(void){
 
 void Sentencia(void){
     TOKEN token = tokenActual;
-    
+    REG_EXPRESION izq, der;
+
     switch ( token ){
-        case ID : {
-            REG_EXPRESION izq, der;
+        case ID : 
+            // REG_EXPRESION izq, der;
             Identificador(&izq);
             Match(ASIGNACION);
             Expresion(&der);
             Asignar(izq, der);
             Match(PUNTOYCOMA);
             break;
-        }
-        case LEER : {
+        
+        case LEER : 
             Match(LEER);
             Match(PARENIZQUIERDO);
             ListaIdentificadores();
             Match(PARENDERECHO);
             Match(PUNTOYCOMA);
             break;
-        }
+        
         case ESCRIBIR :
             Match(ESCRIBIR);
             Match(PARENIZQUIERDO);
