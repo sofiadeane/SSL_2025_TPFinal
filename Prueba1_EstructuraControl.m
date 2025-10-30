@@ -7,8 +7,6 @@ inicio
         escribir(C);
 
     mientras (X >= 0)
-        si (X != 3)
-            escribir(X);
         X := X - 1;
 
     repetir
